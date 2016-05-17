@@ -30,6 +30,7 @@
           <section>
             <h1>計算幾何</h1>
             <h2>Computational Geometry</h2>
+            <p>eddy1021</p>
           </section>
           <section>
             <h2>課程大綱</h2>
@@ -37,9 +38,189 @@
               <li>座標與向量</li>
               <li>有向面積</li>
               <li>線段相交</li>
-              <li>凸包</li>
               <li>誤差分析</li>
             </ul>
+          </section>
+          <section>
+            <h2>何爲計算幾何</h2>
+            <div style="height:600px">
+              <img src=images/Voronoi.png></img>
+            </div>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>座標與向量</h1>
+          </section>
+          <section>
+            <h2>表示平面上的幾何圖形</h2>
+            <ul>
+              <li>長度</li>
+              <li>角度</li>
+              <li>座標</li>
+              <li>向量</li>
+            </ul>
+            <img src="images/triangle.jpe" style="margin-left:100px"></img>
+          </section>
+          <section>
+            <h2>實作上表示平面幾何</h2>
+            <h3>座標、向量</h3>
+            <div style="height:500px">
+              <img src="images/point.png"></img>
+            </div>
+          </section>
+          <section>
+            <h2>實作上表示平面幾何</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+#include &lt;utility&gt; // include pair
+//typedef std::pair&lt;int,int&gt; Pt;
+typedef std::pair&lt;double,double&gt; Pt;
+#define X first
+#define Y second
+Pt point( double x , double y ){
+  return make_pair( x , y );
+}
+int main(){
+  Pt a = point( 4 , 3 );
+  printf( "%d %d\n" , a.X , a.Y );
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>向量(數學補充)</h2>
+            <div style="width:1200px">
+              <p style="float: left;"><img src="images/vectordc.png"></p>
+              <p style="align:center">
+                <br>
+                內積(Dot):<br>
+                $A \cdot B = |A| |B| cos \theta $ <br>
+                $A \cdot B = A_x B_x + A_y B_y$ <br> <br>
+                外積(cross):<br>
+                $A \times B = |A| |B| sin \theta $ <br>
+                $A \times B = A_x B_y - A_y B_x$ <br> <br>
+              </p>
+            </div>
+          </section>
+          <section>
+            <h2>向量基本操作</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+typedef std::pair&lt;double,double&gt; Pt;
+#define X first
+#define Y second
+Pt operator+( const Pt& p1 , const Pt& p2 ){
+  return Pt( p1.X + p2.X , p1.Y + p2.Y );
+}
+Pt operator-( const Pt& p1 , const Pt& p2 ){
+  return Pt( p1.X - p2.X , p1.Y - p2.Y );
+}
+double operator*( const Pt& p1 , const Pt& p2 ){
+  return p1.X * p2.X + p1.Y * p2.Y;
+}
+double operator^( const Pt& p1 , const Pt& p2 ){
+  return p1.X * p2.Y - p1.Y * p2.X;
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>向量基本操作</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+Pt operator*( const Pt& p1 , const double& k ){
+  return Pt( p1.X * k , p1.Y * k );
+}
+Pt operator/( const Pt& p1 , const double& k ){
+  return Pt( p1.X / k , p1.Y / k );
+}
+double abs( const Pt& p1 ){
+  return sqrt( p1 * p1 );
+}
+            </code></pre>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>有向面積</h1>
+          </section>
+          <section>
+            <h2>兩向量形成三角形</h2>
+            <div style="width:1200px">
+              <p style="float: left;"><img src="images/vectordc.png"></p>
+              <p style="align:center">
+                <br> <br>
+                兩向量可夾出三角形<br>
+                其面積可由外積得出：<br>
+                $\Delta OAB = \frac{1}{2} \vec{A} \times \vec{B}$
+                <br> <br>
+                此面積我們稱爲$\textbf{有向面積}$ <br> 
+                (外積有正有負)
+              </p>
+            </div>
+          </section>
+          <section>
+            <h2>有向面積的方向</h2>
+            <div style="width:1200px">
+              <p style="float: left;width:500px"><img src="images/crossplus.png"></p>
+              <p style="align:center;text-align:left">
+                <br> <br>
+                $\vec{AB} \times \vec{AC}$ <br>
+                $=(5,0) \times (3,4)$ <br>
+                $= 5 \times 4 - 0 \times 3$ <br>
+                $=20 &gt; 0$
+              </p>
+            </div>
+          </section>
+          <section>
+            <h2>有向面積的方向</h2>
+            <div style="width:1200px">
+              <p style="float: left;width:500px"><img src="images/crossminus.png"></p>
+              <p style="align:center;text-align:left">
+                <br> <br>
+                $\vec{AC} \times \vec{AB}$ <br>
+                $=(3,4) \times (5,0)$ <br>
+                $= 3 \times 0 - 4 \times 5$ <br>
+                $= -20 &lt; 0$
+              </p>
+            </div>
+          </section>
+          <section>
+            <h2>多邊形的有向面積</h2>
+            <div style="width:1000px">
+              <p style="float: left;width:500px"><img src="images/polygon.jpg"></p>
+              <p style="align:center;text-align:left">
+                <br> 
+                如同三角形 <br>
+                多邊形的有向面積： <br>
+                $\textbf{  逆時針爲正}$ <br>
+                $\textbf{  順時針爲負}$ <br>
+              </p>
+            </div>
+          </section>
+          <section>
+            <h2>多邊形的有向面積</h2>
+            <p>任意在平面上選一點 $A$ <br>
+              將所有點與 $A$ 點連線 <br>
+              相鄰兩點將與 $A$ 點形成三角形 <br>
+              依逆時針(或順時針)序依序加總各三角形有向面積 <br>
+              即爲該多邊形之有向面積
+            </p>
+          </section>
+          <section>
+            <h2>多邊形的有向面積</h2>
+            <p> 一般而言，會挑選原點作爲參考點 <br>
+              若一個多邊形的頂點依序爲：<br>
+              $P_0,P_1,\ldots,P_{N-1},P_N=P_0$ <br>
+              則多邊形的有向面積公式爲：<br>
+              $\text{Area}=\frac{1}{2} \sum\limits_{i=0}^{N-1} \vec{P_i} \times \vec{P_{i+1}}$ <br>
+            </p>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>線段相交</h1>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>誤差分析</h1>
           </section>
         </section>
       </div>
