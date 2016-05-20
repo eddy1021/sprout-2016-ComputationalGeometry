@@ -196,6 +196,10 @@ double abs( const Pt& p1 ){
           </section>
           <section>
             <h2>多邊形的有向面積</h2>
+            <img src="images/area.png"></img>
+          </section>
+          <section>
+            <h2>多邊形的有向面積</h2>
             <p>任意在平面上選一點 $A$ <br>
               將所有點與 $A$ 點連線 <br>
               相鄰兩點將與 $A$ 點形成三角形 <br>
@@ -217,10 +221,171 @@ double abs( const Pt& p1 ){
           <section>
             <h1>線段相交</h1>
           </section>
+          <section>
+            <h2>如何判斷？</h2>
+            <h3>直接求出交點，再判斷交點是否在線段內</h3>
+          </section>
+          <section>
+            <h2>如何判斷？</h2>
+            <h3>直接求出交點，再判斷交點是否在線段內</h3>
+            <ul>
+              <li>求交點 $\Rightarrow$ 沒有交點？無限多交點？</li>
+              <li>交點不好求 e.g. 垂直線</li>
+              <li>交點位置誤差？</li>
+            </ul>
+          </section>
+          <section>
+            <h2>更精準的求線段相交</h2>
+            利用外積定義方向函式：
+            <pre><code class="cpp" data-trim contenteditable>
+int ori( const Pt& o , const Pt& a , const Pt& b ){
+  double cross = ( a - o ) ^ ( b - o );
+  if( fabs( cross ) &lt; eps ) return 0;
+  return cross &gt; 0 ? 1 : -1;
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>更精準的求線段相交</h2>
+            若線段 $P_1P_2$ 與 $P_3P_4$ 相交。<br>
+            則點 $P_3 與點 P_4$ 會在線段 $P_1P_2$ 異側。
+          </section>
+          <section>
+            <h2>更精準的求線段相交</h2>
+            若線段 $P_1P_2$ 與 $P_3P_4$ 相交。<br>
+            則點 $P_3 與點 P_4$ 會在線段 $P_1P_2$ 異側。<br>
+            利用方向函式即代表：<br>
+            $\texttt{ori}(P_1,P_2,P_3)\times \texttt{ori}(P_1,P_2,P_4) &lt; 0$
+          </section>
+          <section>
+            <h1>這樣就考慮完了嗎？</h1>
+          </section>
+          <section>
+            <h2>兩條平行線也可能相交</h2>
+          </section>
+          <section>
+            <h2>兩條平行線也可能相交</h2>
+            共線才有可能相交！<br>
+            平行： $(P_2 - P_1) \text{^} (P_4 - P_3) = 0$ <br>
+            共線： $\texttt{ori}(P_1,P_2,P_3) = 0$ 
+          </section>
+          <section>
+            <h2>平行線相交交點位置</h2>
+            點 $P_1$ 在 線段 $P_2P_3$ 上：<br>
+            $(P_2 - P_1) \cdot (P_3 - P_1) &lt; 0$
+          </section>
         </section>
         <section>
           <section>
             <h1>誤差分析</h1>
+          </section>
+          <section>
+            <h2>爲什麼需要誤差分析</h2>
+            <ul>
+              <li>計算幾何中經常遇到浮點數</li>
+              <li>浮點數以二進位儲存必然會產生誤差</li>
+              <li>$\frac{1}{3},\sqrt{2},\pi$</li>
+            </ul>
+          </section>
+          <section>
+            <h2>浮點數儲存誤差</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+puts( 0.1 + 0.2 == 0.3 ? "equal" : "not equal" );
+            </code></pre>
+            <table>
+              <tr>
+                <td>形態</td>
+                <td>大小</td>
+                <td>精度</td>
+              </tr>
+              <tr>
+                <td>float</td>
+                <td>4 B</td>
+                <td>$10^{-7}$</td>
+              </tr>
+              <tr>
+                <td>double</td>
+                <td>8 B</td>
+                <td>$10^{-16}$</td>
+              </tr>
+              <tr>
+                <td>long double</td>
+                <td>10 B</td>
+                <td>$10^{-19}$</td>
+              </tr>
+            </table> 
+          </section>
+          <section>
+            <h2>誤差容忍值($\texttt{eps}$)</h2>
+            將所有數字膨脹 eps 的大小 <br>
+            $x \Rightarrow (x-\texttt{eps},x+\texttt{eps})$ <br> <br>
+            兩數相差 $\texttt{eps}$ 內視爲相等
+          </section>
+          <section>
+            <h2>容忍誤差的比較</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+bool operator==( const double& a , const double& b ){
+  return b - eps &lt; a && a &lt; b + eps; 
+}
+bool operator&lt;( const double& a , const double& b ){
+  return a &lt; b - eps;
+}
+bool operator&lt;=( const double& a , const double& b ){
+  return a &lt; b + eps;
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>如何決定$\texttt{eps}$的大小</h2>
+            <ul>
+              <li>不能太小，應相等的數判成不相等</li>
+              <li>不能太大，不應相等的數判成相等</li>
+            </ul> <br> <br>
+          </section>
+          <section>
+            <h2>如何決定$\texttt{eps}$的大小</h2>
+            <ul>
+              <li>不能太小，應相等的數判成不相等</li>
+              <li>不能太大，不應相等的數判成相等</li>
+            </ul> <br> <br>
+            一般視題目而定，可大到 $10^{-2}$ 或小到 $10^{-14}$。<br>
+            多落在 $10^{-6}$ 到 $10^{-12}$ 之間
+          </section>
+          <section>
+            <h2>估算$\texttt{eps}的下界$</h2>
+            誤差會有疊加的現象！
+          </section>
+          <section>
+            <h2>估算$\texttt{eps}的下界$</h2>
+            加減法 $\Rightarrow$ 絕對誤差相加 <br>
+            $(x+\Delta x) \pm (y+\Delta y) = (x \pm y) + (\Delta x \pm \Delta y)$
+          </section>
+          <section>
+            <h2>估算$\texttt{eps}的下界$</h2>
+            乘除法 $\Rightarrow$ 相對誤差相加 <br>
+            $(x+\Delta x) \cdot (y+\Delta y) = xy( 1 + \frac{ \Delta x }{x} )(1+\frac{ \Delta y }{ y })$ <br>
+            $\approx xy( 1 + \frac{ \Delta x }{x} + \frac{ \Delta y }{ y } )$
+          </section>
+          <section>
+            <h2>估算$\texttt{eps}的下界$</h2>
+            經過 $K$ 次運算，相對誤差不會超過 $K \epsilon$ <br>
+            因此，數字範圍在 $V$ 內時，eps 至少要是 $V K \epsilon$
+          </section>
+          <section>
+            <h2>估算$\texttt{eps}的上界$</h2>
+            要能分辨不同的數字！
+          </section>
+          <section>
+            <h2>估算$\texttt{eps}的上界$</h2>
+            <ul>
+              <li> 保證變動 $10^{-7}$ 不影響答案 </li>
+              <li> 答案輸出至小數點後第六位 </li>
+              <li> 答案與正確答案絕對或相對誤差小於 $10^{-6}$ 視爲正確 </li>
+            </ul>
+          </section>
+          <section>
+            <h2>計算幾何避免誤差大法！</h2>
+            不到最後關頭，絕不用浮點數！
           </section>
         </section>
       </div>
