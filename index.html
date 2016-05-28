@@ -324,13 +324,13 @@ puts( 0.1 + 0.2 == 0.3 ? "equal" : "not equal" );
           <section>
             <h2>容忍誤差的比較</h2>
             <pre><code class="cpp" data-trim contenteditable>
-bool operator==( const double& a , const double& b ){
+bool equal( const double& a , const double& b ){
   return b - eps &lt; a && a &lt; b + eps; 
 }
-bool operator&lt;( const double& a , const double& b ){
+bool less( const double& a , const double& b ){
   return a &lt; b - eps;
 }
-bool operator&lt;=( const double& a , const double& b ){
+bool lessOrEqual( const double& a , const double& b ){
   return a &lt; b + eps;
 }
             </code></pre>
