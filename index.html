@@ -388,6 +388,87 @@ bool operator&lt;=( const double& a , const double& b ){
             不到最後關頭，絕不用浮點數！
           </section>
         </section>
+        <section>
+          <section>
+            <h1>更多數學</h1>
+          </section>
+          <section>
+            <h2>徑度</h2>
+            <p>$\pi=3.14159265358979...=180^{\circ}$</p>
+          </section>
+          <section>
+            <h2>三角函數</h2>
+            <div style="width:1000px">
+              <p style="float: left;width:500px"><img src="images/tri.PNG"></p>
+              <p style="align:center;text-align:left">
+                <br> 
+                $cos(x)=\frac{b}{c}$ <br> 
+                $sin(x)=\frac{a}{c}$ <br> 
+                $tan(x)=\frac{a}{b}$ 
+              </p>
+            </div>
+          </section>
+          <section>
+            <h2>廣義三角函數</h2>
+            <div style="width:1000px">
+              <p style="float: left;width:600px"><img src="images/gentri.png"></p>
+              <p style="align:center;text-align:left">
+                <br> 
+                $cos(\theta)=\frac{x}{r}$ <br> <br>
+                $sin(\theta)=\frac{y}{r}$ <br> <br>
+                $tan(\theta)=\frac{y}{x}$ <br> <br>
+                $atan2(y,x)=\theta$ 
+              </p>
+            </div>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>凸包</h1>
+          </section>
+          <section>
+            <h2>凸包</h2>
+            <img src="images/ch.png">
+          </section>
+          <section>
+            <h2>Monotone Chain</h2>
+            <img src="images/monotone.png">
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>極角排序</h1>
+          </section>
+          <section>
+            <h2>極角排序</h2>
+            <img src="images/asort.png">
+          </section>
+          <section>
+            <h2>Sort by angle</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+Pt o;
+D angle( const Pt& x ){
+  return atan2( x.Y , x.X );
+}
+bool cmp( Pt a , Pt b ){
+  return angle( a - o ) &lt; angle( b - o );
+}
+            </code></pre>
+          </section>
+          <section>
+            <h2>Sort by cross</h2>
+            <pre><code class="cpp" data-trim contenteditable>
+Pt o;
+bool cmp( Pt a , Pt b ){
+  return ( a - o ) ^ ( b - o ) &gt; 0;
+}
+            </code></pre>
+          </section>
+          <section>
+            <p>平面上 $N$ 個點，問一條直線最多通過幾個點</p>
+            <p>$O(N^3) \Rightarrow O(N^2\lg N)$</p>
+          </section>
+        </section>
       </div>
     </div>
 
